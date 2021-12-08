@@ -17,6 +17,8 @@ export class EditAppComponent implements OnInit {
   };
   success = false;
 
+  selectedField: field; 
+
   fieldModels:Array<field>=[
     {
       "type": "text",
@@ -296,7 +298,9 @@ export class EditAppComponent implements OnInit {
     // });
   }
 
-
+  onFieldSelected(fieldName) {
+    this.selectedField = this.modelFields.find(f => f.name == fieldName);
+  }
 
   toggleValue(item){
     item.selected = !item.selected;

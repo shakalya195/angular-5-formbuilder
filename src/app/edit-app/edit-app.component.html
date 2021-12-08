@@ -10,8 +10,7 @@
   </div>
   <div class="spacer30"></div>
   <div class="row">
-    <div class="col-4">
-
+    <div class="col-2">
         <div class="row">
         <label class="col-8">Background Color</label>
         <input class="colorpick col-4" type="color" name="bgColor" [(ngModel)]="model.theme.bgColor" >    
@@ -34,7 +33,7 @@
       </div>
 
     </div>
-    <div class="col-8">
+    <div class="col-7">
 
       <div class="form-group"
       style="margin-bottom: 0px !important; padding: 30px 60px 5px 60px;"
@@ -59,7 +58,7 @@
         (dndMoved)="onDragged(item, model.attributes, 'move')"
         [dndEffectAllowed]="'all'" 
         [dndDraggable]="item">
-        <div class="row form-group">
+        <div (click)="onFieldSelected(item.name)" class="row form-group">
           <div class="col-1"><i class="fa fa-ellipsis-v dndHandle" dndHandle></i></div>
           <div class="col-7">
             <!-- <i [ngClass]="item.icon" class="fa pull-left"></i>
@@ -235,10 +234,6 @@
               </div>
             </div>
           </div>
-          
-
-
-        
         </div>
       </div>
       <!--optional placeholder element for dropzone-->
@@ -247,6 +242,109 @@
       </div>
       </section>
 
+    </div>
+    <div *ngIf="selectedField" class="col-3">
+      <!-- Properties Panel -->
+      <div style="padding: 10px; margin-top:150px; box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;">
+        <div class="form-group">
+          <label style="padding-right: 10px;">Required</label>
+          <i *ngIf="selectedField.required" (click)="selectedField.required=false" class="fa fa-toggle-on red"></i>
+          <i *ngIf="!selectedField.required" (click)="selectedField.required=true" class="fa fa-toggle-off"></i>
+          <span class="pull-right ucfirst">{{selectedField.type}}</span>
+        </div>
+        <div class="form-group">
+            <label>Label</label>
+            <input class="form-control" type="text" [(ngModel)]="selectedField.label" />
+        </div>
+        <div class="form-group">
+            <label>Name</label>
+            <input class="form-control" type="text" [(ngModel)]="selectedField.name" />
+        </div>
+        <div class="form-group">
+            <label>Placeholder</label>
+            <input class="form-control" type="text" [(ngModel)]="selectedField.placeholder" />
+        </div>
+        <div class="form-group">
+          <label>Regex</label>
+          <input class="form-control" type="text" [(ngModel)]="selectedField.regex" />
+        </div>
+        <div *ngIf="selectedField.regex" class="form-group">
+          <label>Error text</label>
+          <input class="form-control" type="text" [(ngModel)]="selectedField.errorText" />
+        </div>
+        
+        <!-- number -->
+        <div *ngIf="selectedField.type=='number'" class="row">
+          <div class="col-6">
+              <div class="form-group">
+                  <label>Min</label>
+                  <input class="form-control" type="text" [(ngModel)]="selectedField.min" />
+              </div>
+          </div>
+          <div class="col-6">
+              <div class="form-group">
+                  <label>Max</label>
+                  <input class="form-control" type="text" [(ngModel)]="selectedField.max" />
+              </div>
+          </div>
+        </div>
+
+        <!-- radio || checkbox || autocomplete -->
+        <div *ngIf="selectedField.type=='radio'|| selectedField.type=='checkbox' || selectedField.type=='autocomplete'" >
+            <div class="row">
+                <div class="col-5">
+                    <div class="form-group">
+                        <label>Label</label>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="form-group">
+                        <label>Value</label>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <div class="form-group">
+                        <label>Action</label>
+                    </div>
+                </div>
+              </div>
+            <div *ngFor="let i of selectedField.values; let valueIndex=index;" class="row">
+            <div class="col-5">
+                <div class="form-group">
+                    <input class="form-control" type="text" [(ngModel)]="i.label" />
+                </div>
+            </div>
+            <div class="col-5">
+                <div class="form-group">
+                    <input class="form-control" type="text" [(ngModel)]="i.value" />
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label (click)="selectedField.values.splice(valueIndex,1)">remove</label>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-5">
+                <div class="form-group">
+                    <input class="form-control" type="text" [(ngModel)]="value.label" />
+                </div>
+            </div>
+            <div class="col-5">
+                <div class="form-group">
+                    <input class="form-control" type="text" [(ngModel)]="value.value" />
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label (click)="addValue(selectedField.values)">Add</label>
+                </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>
