@@ -231,13 +231,21 @@ export class EditAppComponent implements OnInit {
   onDrop( event:DndDropEvent, list?:any[] ) {
     if( list && (event.dropEffect === "copy" || event.dropEffect === "move") ) {
       
-      if(event.dropEffect === "copy")
-      event.data.name = event.data.type+'-'+new Date().getTime();
+      if(event.dropEffect === "copy") {
+        event.data.name = event.data.type+'-'+new Date().getTime();
+      }
+      
       let index = event.index;
       if( typeof index === "undefined" ) {
         index = list.length;
       }
+      
       list.splice( index, 0, event.data );
+
+      if(event.dropEffect === "copy") {
+        this.onFieldSelected(event.data.name);
+      }
+      
     }
   }
 
@@ -258,6 +266,7 @@ export class EditAppComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.model.attributes.splice(i,1);
+        this.onFieldSelected(null);
       }
     });
 
